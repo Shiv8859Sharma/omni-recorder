@@ -7,15 +7,17 @@ import { useScreenRecorderState } from './lib/screenRecorder';
 import PermisionPopup from './pages/permisionPopup';
 
 export default function App() {
-    const { setScreenRecorderState } = useScreenRecorderState();
-
+    const { setScreenRecorderState, screenRecorderState } = useScreenRecorderState();
+    let { recorder } = screenRecorderState
     const handleTypeScreenRecordPopup = async () => {
-        setScreenRecorderState(prev => ({
-            ...prev,
-            permisionPopup: true,
-            screenControlsButtons: true,
-            webCamera: true
-        }));
+        if (!recorder) {
+            setScreenRecorderState(prev => ({
+                ...prev,
+                permisionPopup: true,
+                screenControlsButtons: true,
+                webCamera: true
+            }));
+        }
     };
 
 
@@ -23,7 +25,7 @@ export default function App() {
     return (
         <>
             <div className='flex items-center justify-center h-full w-full'>
-                <GredientButton onClick={handleTypeScreenRecordPopup}>
+                <GredientButton disabled={recorder !== null} onClick={handleTypeScreenRecordPopup}>
                     Do you want to screen record!
                 </GredientButton>
                 <WebCamWithControl position='bottom-6 left-2' />
